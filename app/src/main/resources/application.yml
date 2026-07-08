@@ -1,0 +1,14 @@
+server:
+  port: 8080
+  tomcat:
+    threads:
+      max: ${SERVER_TOMCAT_THREADS_MAX:200}
+
+spring:
+  threads:
+    virtual:
+      enabled: ${VIRTUAL_THREADS:false}
+
+api2:
+  url: ${API2_URL:http://api2:8080}
+  delay-ms: ${API2_DELAY_MS:200}
