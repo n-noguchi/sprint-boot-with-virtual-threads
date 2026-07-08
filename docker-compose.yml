@@ -23,9 +23,27 @@ services:
     image: grafana/k6:latest
     environment:
       QUICK: ${QUICK:-false}
+      BASE_URL: ${BASE_URL:-http://api1:8080}
     volumes:
       - ./k6:/scripts
       - ./results:/results
     command: ["run", "/scripts/script.js"]
+
+  # --- Go (Gin) ---
+  api1-go:
+    build: ./app-go
+    environment:
+      API2_URL: http://api2-go:8080
+      API_MAX_CONCURRENCY: ${GO_MAX_CONCURRENCY:-0}
+    ports:
+      - "8091:8080"
     depends_on:
-      - api1
+      - api2-go
+
+  api2-go:
+    build: ./app-go
+    environment:
+      API2_DELAY_MS: ${API2_DELAY_MS:-200}
+      API_MAX_CONCURRENCY: ${GO_MAX_CONCURRENCY:-0}
+    ports:
+      - "8092:8080"
